@@ -58,7 +58,7 @@ for month in range(1,13):
             print("month:"+ str(month) + " " "day:" + str(day))
             
 article_link = [y for x in article_link for y in x]
-f_name = "wsj_" + str(year) + "_link.txt'"
+f_name = "wsj_" + str(year) + "_link.txt"
 f = open(f_name,'w')
 for i in article_link:
     f.write(i)
