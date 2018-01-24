@@ -27,19 +27,37 @@ loginReady.submit()
 link_file = input("Enter the name of link file(without .txt): ")+ ".txt"
 out_file  = input("Enter the name for output file(without .txt): ")+ ".txt"
 junk_file = input("Enter the name for junk file(without .txt): ")+ ".txt"
-t_type    = input("Do you want to extract articles for all links(type Y or N): ")
-if t_type.lower() == "y":
-    number = float('inf')
+cur_type  = input("Do you want to start from the beginning(y or n): ")
+
+
+
+
+if cur_type.lower() == "y":
+    cur_num = 1
+    t_type    = input("Do you want to extract articles for all links(type Y or N): ")
+    if t_type.lower() == "y":
+        number = float('inf')
+    else:
+        number = float(input("Type the number of articles you want to extract: "))
+        
 else:
+    cur_num = int(input("Enter the number you want to start from: "))
     number = float(input("Type the number of articles you want to extract: "))
+
 start_time = time.time()
 count = 0
 effective_count = 0
-with open(link_file, 'r') as infile, open(out_file,"w") as outfile,open(junk_file,"w") as junkfile:
+with open(link_file, 'r') as infile, open(out_file,"a") as outfile,open(junk_file,"a") as junkfile:
     for link in infile:
-        if count < number:
+        
+        if count < cur_num-1:
+            count+=1
+            continue
+            
+        if count - (cur_num-1) < number:
             driver.get(link)
-            count += 1
+            count+=1
+        
             
             ##extract tag
             tt = []
@@ -103,15 +121,16 @@ with open(link_file, 'r') as infile, open(out_file,"w") as outfile,open(junk_fil
                 d = 10
             else:
                 d = 100
-            if count % d == 0:
-                print("# extract article: " + str(count))
+            if (count - cur_num+1) % d == 0:
+                print("# extract article: " + str(count - cur_num + 1))
             if effective_count % d == 0:
                 print("# extract effective article: " + str(effective_count))
             time.sleep(0.5)
 end_time = time.time()
 print("Time spent: " + str(np.round((end_time - start_time),3)) + "s")
-print("Total number of article:" + str(count))
+print("Total number of article:" + str(count - cur_num + 1))
 print("Total number of effective article:" + str(effective_count))
+print("You should start from {} next time".format(count+1))
 print("Article extraction complete!")
 o_c = input("Do you want to close Chromedriver?(type Y or N)")
 if o_c.lower() == "y":
