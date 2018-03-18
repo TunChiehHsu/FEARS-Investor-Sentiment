@@ -1,6 +1,5 @@
 % Load Data 
-load('Mat.mat')
-data = csvread('df_all.csv',1,1);
+data = csvread('/Users/mueric35/Desktop/Sentiment-and-Marktet-Analysis/GTdata/df_all.csv',1,1);
 
 % set Y
 Y = data(:,1)';
